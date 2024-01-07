@@ -15,7 +15,7 @@ screen = pygame.display.set_mode(WH)  # , flags=pygame.FULLSCREEN)
 clock = pygame.time.Clock()
 
 
-background = PIL.Image.open("bg_upscaled.png")
+background = PIL.Image.open("bg_1344x896.png")
 background = background.resize(WH)
 background = pygame.image.frombytes(
     background.tobytes(), background.size, background.mode
@@ -26,7 +26,6 @@ texts = "Press F11 or F to toggle fullscreen", "Press ESC or Q to Quit"
 texts = tuple(map(lambda text: font.render(text, False, WHITE, BG_COLOR), texts))
 for text in texts:
     text.set_colorkey(BG_COLOR)
-print(texts)
 
 
 def render_texts(surface, texts, pos):
