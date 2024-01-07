@@ -15,10 +15,9 @@ screen = pygame.display.set_mode(WH)  # , flags=pygame.FULLSCREEN)
 clock = pygame.time.Clock()
 
 
-background = PIL.Image.open("bg_1344x896.png")
-background = background.resize(WH)
-background = pygame.image.frombytes(
-    background.tobytes(), background.size, background.mode
+background_img = PIL.Image.open("bg_1344x896.png").resize(WH)
+background_surf = pygame.image.frombytes(
+    background_img.tobytes(), background_img.size, background_img.mode
 )
 
 font = pygame.font.Font("Bahianita-Regular.ttf", 48)
@@ -50,7 +49,7 @@ while running:
                     pygame.display.set_mode(WH)
                 else:
                     pygame.display.set_mode(WH, flags=pygame.FULLSCREEN)
-    screen.blit(background, (0, 0))
+    screen.blit(background_surf, (0, 0))
     render_texts(screen, texts, (100, 100))
 
     pygame.display.flip()

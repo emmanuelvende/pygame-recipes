@@ -19,7 +19,7 @@ def scr2phy(xy, surface):
         T = type(xy)
         if T in (list, tuple, pygame.math.Vector2):
             Y = surface.get_height()
-            return T(xy[0], Y - xy[1])
+            return T((xy[0], Y - xy[1]))
         else:
             raise NotImplementedError(f"Unrecognized coordinate type: '{T}'")
 

@@ -33,7 +33,7 @@ clock = pygame.time.Clock()
 pygame.mouse.set_visible(0)
 
 
-hero_surf = pygame.image.load("img1.png")
+hero_surf = pygame.image.load("hero.png")
 hero_surf.set_colorkey(COLOR_KEY)
 hero_mask = pygame.mask.from_surface(hero_surf)
 
