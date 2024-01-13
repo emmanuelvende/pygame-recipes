@@ -10,10 +10,6 @@ YELLOW = 228, 228, 16
 COLOR_KEY = 17, 17, 17
 
 
-def substract_pos(pos_a, pos_b):
-    return tuple(pos_a[i] - pos_b[i] for i in range(len(pos_a)))
-
-
 def add_pos(pos_a, pos_b):
     return tuple(pos_a[i] + pos_b[i] for i in range(len(pos_a)))
 
