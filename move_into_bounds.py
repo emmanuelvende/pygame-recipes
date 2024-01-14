@@ -1,5 +1,6 @@
 import pygame
 import morepygame
+import morepygame.keyboard
 from pygame import *
 from pygame.math import Vector2 as Vec
 
@@ -33,28 +34,15 @@ while running:
             if event.key == pygame.K_q:
                 running = False
 
-    keys_pressed = pygame.key.get_pressed()
-    dx, dy = 0, 0
-    if keys_pressed[K_LEFT]:
-        dx = -1
-    if keys_pressed[K_RIGHT]:
-        dx = 1
-    if keys_pressed[K_UP]:
-        dy = -1
-    if keys_pressed[K_DOWN]:
-        dy = 1
+    dxdy = morepygame.keyboard.get_moving_amount()
+    if dxdy:
+        player.pos += dxdy
 
-    pos = Vec(player.pos)
-    pos += Vec(dx, dy)
-    player.pos = pos
-
-    player.stays_into_bounds(inner_rect, x_offset=-10, y_offset=4)
+    player.stays_into_bounds(inner_rect, -10, 0, 10, 20)
 
     player.display_on_surface(screen)
-    rect = pygame.Rect(
-        player._display_pos,
-        (player.surface.get_rect().width, player.surface.get_rect().height),
-    )
-    pygame.draw.rect(screen, (255, 0, 0), rect, 1)
+    pygame.draw.rect(screen, (255, 0, 0), player.get_rect(), 1)
 
     pygame.display.flip()
+
+    clock.tick(60)
