@@ -9,22 +9,22 @@ class Entity:
         """
         self.surface = None
         self.speed_vec = Vec(speed)
-        self.pos = pos
+        self.pos = Vec(pos)
 
     @property
     def pos(self):
-        return self._pos
+        return self._pos_vec
 
     @pos.setter
-    def pos(self, pp):
-        self._pos = pp
+    def pos(self, newpos):
+        self._pos_vec = Vec(newpos)
         if self.surface:
             center = self.surface.get_rect().center
         else:
-            center = self._pos
+            center = self._pos_vec
 
         self._display_pos = tuple(
-            self.pos[i] - center[i] for i in range(len(self._pos))
+            self.pos[i] - center[i] for i in range(len(self._pos_vec))
         )
 
     def stays_into_bounds(self, bounding_rect, x_offset=0, y_offset=0):
@@ -36,7 +36,7 @@ class Entity:
             lefttop = self._display_pos
             me_rect = pygame.Rect(lefttop, (w, h))
         else:
-            me_rect = pygame.Rect(self._pos, (0, 0))
+            me_rect = pygame.Rect(self._pos_vec, (0, 0))
         offset_top = me_rect.top - bounding_rect.top
         offset_bottom = bounding_rect.bottom - me_rect.bottom
         offset_left = me_rect.left - bounding_rect.left
