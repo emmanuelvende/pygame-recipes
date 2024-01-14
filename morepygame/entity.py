@@ -2,6 +2,14 @@ import pygame
 from pygame.math import Vector2 as Vec
 
 
+class Offset:
+    def __init__(self, left=0, right=0, top=0, bottom=0):
+        self.left = left
+        self.right = right
+        self.top = top
+        self.bottom = bottom
+
+
 class Entity:
     def __init__(self, pos=(0, 0), speed=(0, 0)):
         """
@@ -29,7 +37,7 @@ class Entity:
 
     def get_rect(self):
         """
-        Return a `pygame.Rect` indicating 
+        Return a `pygame.Rect` indicating
         """
         if self.surface:
             w, h = self.surface.get_width(), self.surface.get_height()
@@ -38,44 +46,45 @@ class Entity:
         else:
             return pygame.Rect(self._pos_vec, (0, 0))
 
-    def stays_into_bounds(
-        self,
-        bounding_rect,
-        left_offset=0,
-        right_offset=0,
-        top_offset=0,
-        bottom_offset=0,
-    ):
+    def stays_into_bounds(self, bounding_rect, allowed_offset):
         """
         `_offset` values are the allowed offsets out of bounds.
 
-        Example: if `top_offset == 10` then the entity is allowed to enter 
+        Example: if `top_offset == 10` then the entity is allowed to enter
         10px at the top of the bounding rect.
 
         A negative offset value indicates a distance to stay away from
         the corresponding bounding edge.
         """
         me_rect = self.get_rect()
-        my_offset_top = me_rect.top - bounding_rect.top
-        my_offset_bottom = bounding_rect.bottom - me_rect.bottom
-        my_offset_left = me_rect.left - bounding_rect.left
-        my_offset_right = bounding_rect.right - me_rect.right
+        my_offset = Offset()
+        my_offset.top = me_rect.top - bounding_rect.top
+        my_offset.bottom = bounding_rect.bottom - me_rect.bottom
+        my_offset.left = me_rect.left - bounding_rect.left
+        my_offset.right = bounding_rect.right - me_rect.right
+        self._move_according_to_offsets(my_offset, allowed_offset)
 
+    def _move_according_to_offsets(self, my_offset, allowed_offset):
         dx, dy = 0, 0
-        if my_offset_top + top_offset < 0:
-            dy = abs(my_offset_top + top_offset)
-        elif my_offset_bottom + bottom_offset < 0:
-            dy = -abs(my_offset_bottom + bottom_offset)
-        if my_offset_left + left_offset < 0:
-            dx = abs(my_offset_left + left_offset)
-        elif my_offset_right + right_offset < 0:
-            dx = -abs(my_offset_right + right_offset)
+        if my_offset.top + allowed_offset.top < 0:
+            dy = abs(my_offset.top + allowed_offset.top)
+        elif my_offset.bottom + allowed_offset.bottom < 0:
+            dy = -abs(my_offset.bottom + allowed_offset.bottom)
+        if my_offset.left + allowed_offset.left < 0:
+            dx = abs(my_offset.left + allowed_offset.left)
+        elif my_offset.right + allowed_offset.right < 0:
+            dx = -abs(my_offset.right + allowed_offset.right)
         if (dx, dy) != (0, 0):
             self.pos += Vec(dx, dy)
 
-    def stay_out_of_bounds(self, bounding_rect):
-        pass
-
+    def stay_out_of_bounds(self, bounding_rect, allowed_offset):
+        me_rect = self.get_rect()
+        my_offset = Offset()
+        my_offset.top = me_rect.top - bounding_rect.bottom
+        my_offset.bottom = me_rect.bottom - bounding_rect.top
+        my_offset.left = me_rect.left - bounding_rect.right
+        my_offset.right = me_rect.right - bounding_rect.left
+        self._move_according_to_offsets(my_offset, allowed_offset)
 
     def apply_image(self, img_filepath, colorkey=None):
         self.apply_surface(pygame.image.load(img_filepath), colorkey)

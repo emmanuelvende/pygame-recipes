@@ -60,6 +60,9 @@ ground.pos = screen.get_rect().center
 
 ground_rect = ground.get_rect()
 
+OFFSETS = 4 * (-LINE_WIDTH,)
+INNER_OFFSET = morepygame.Offset(*OFFSETS)
+
 entities = ground, player, ball
 
 running = True
@@ -83,8 +86,7 @@ while running:
     if dxdy:
         player.pos += dxdy
 
-    OFFSETS = 4 * (-LINE_WIDTH,)
-    player.stays_into_bounds(ground_rect, *OFFSETS)
+    player.stays_into_bounds(ground_rect, INNER_OFFSET)
 
     for entity in entities:
         entity.display_on_surface(screen)
@@ -97,7 +99,7 @@ while running:
     manage_bouncing(ball, ground)
     manage_bouncing(ball, player)
 
-    ball.stays_into_bounds(ground_rect, *OFFSETS)
+    ball.stays_into_bounds(ground_rect, INNER_OFFSET)
 
     pygame.display.flip()
 

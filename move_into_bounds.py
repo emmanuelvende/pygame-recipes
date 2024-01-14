@@ -38,7 +38,7 @@ while running:
     if dxdy:
         player.pos += dxdy
 
-    player.stays_into_bounds(inner_rect, -10, 0, 10, 20)
+    player.stays_into_bounds(inner_rect, morepygame.Offset(-10, 0, 10, 20))
 
     player.display_on_surface(screen)
     pygame.draw.rect(screen, (255, 0, 0), player.get_rect(), 1)
