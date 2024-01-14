@@ -1,10 +1,13 @@
 import pygame
-
+from pygame.math import Vector2 as Vec
 
 class Entity:
     def __init__(self, pos=(0, 0), speed=(0, 0)):
+        """
+        `speed` : can be either 2-items tuple or `pygame.math.Vector2d`
+        """
         self.surface = None
-        self.speed = speed
+        self.speed_vec = Vec(speed)
         self.pos = pos
 
     @property
@@ -38,9 +41,14 @@ class Entity:
         surface.blit(self.mask.to_surface(), self._display_pos)
 
     def move(self, dt):
-        self.pos = tuple(self.pos[i] + self.speed[i] * dt for i in range(len(self.pos)))
+        self.pos = tuple(self.pos[i] + self.speed_vec[i] * dt for i in range(len(self.pos)))
 
     def collide(self, other, compute_normal=False):
+        """
+        If `compute_normal == True`, returns `collision_pos, collision_vec`
+        else return `collision_pos`.
+        Either `collision_pos` or `collision_vec` can be `None`
+        """
         offset = tuple(
             other._display_pos[i] - self._display_pos[i]
             for i in range(len(self._display_pos))
@@ -63,7 +71,7 @@ class Entity:
                 dy = self.mask.overlap_area(
                     other.mask, (x, y + 1)
                 ) - self.mask.overlap_area(other.mask, (x, y - 1))
-                return collision_pos, (dx, dy)
+                return collision_pos, Vec(dx, dy)
             else:
                 return None, None
         else:
