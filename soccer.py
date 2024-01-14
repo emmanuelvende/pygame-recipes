@@ -86,7 +86,7 @@ while running:
     if dxdy:
         player.pos += dxdy
 
-    player.stays_into_bounds(ground_rect, INNER_OFFSET)
+    player.stay_into(ground_rect, INNER_OFFSET)
 
     for entity in entities:
         entity.display_on_surface(screen)
@@ -99,7 +99,7 @@ while running:
     manage_bouncing(ball, ground)
     manage_bouncing(ball, player)
 
-    ball.stays_into_bounds(ground_rect, INNER_OFFSET)
+    ball.stay_into(ground_rect, INNER_OFFSET)
 
     pygame.display.flip()
 
