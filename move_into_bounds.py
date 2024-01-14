@@ -18,7 +18,9 @@ inner_rect = pygame.Rect((50, 50), (500, 500))
 
 player = morepygame.Entity((50, 50))
 player.apply_image("hero.png", colorkey=COLOR_KEY)
-player.pos = inner_rect.center
+player.pos = 100, 200
+
+forbidden_rect = pygame.Rect((300, 280), (100, 70))
 
 running = True
 while running:
@@ -38,7 +40,11 @@ while running:
     if dxdy:
         player.pos += dxdy
 
-    player.stays_into_bounds(inner_rect, morepygame.Offset(-10, 0, 10, 20))
+    pygame.draw.rect(screen, (255, 0, 255), forbidden_rect, width=1)
+
+    player.stay_into(inner_rect, morepygame.Offset(-10, 0, 10, 20))
+    # player.stay_into(inner_rect)
+    player.stay_out_of(forbidden_rect)
 
     player.display_on_surface(screen)
     pygame.draw.rect(screen, (255, 0, 0), player.get_rect(), 1)
