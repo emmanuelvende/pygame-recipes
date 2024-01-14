@@ -31,8 +31,6 @@ class Entity:
         """
         x_offset and y_offset shall be positive
         """
-        if x_offset < 0 or y_offset < 0:
-            raise ArithmeticError("x_offset and y_offset cannot be negative")
         if self.surface:
             w, h = self.surface.get_width(), self.surface.get_height()
             lefttop = self._display_pos
