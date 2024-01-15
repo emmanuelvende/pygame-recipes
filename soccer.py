@@ -2,6 +2,7 @@ import pygame
 import morepygame
 import morepygame.keyboard
 from pygame.math import Vector2 as Vec
+import PIL.Image
 
 
 def display_collision_on_surface(surface, entity, other):
@@ -28,7 +29,8 @@ BALL_COLOR = 128, 222, 248
 WHITE = 242, 242, 232
 OFFSET = 50
 GROUND_COLOR = 8, 64, 16
-
+bg_img = PIL.Image.open("soccer_background_02.png").resize((W, H))
+bg_surf = pygame.image.frombytes(bg_img.tobytes(), bg_img.size, bg_img.mode)
 
 pygame.init()
 pygame.display.set_caption("soccer")
@@ -61,7 +63,6 @@ ground.pos = screen.get_rect().center
 ground_rect = ground.get_rect()
 
 OFFSETS = 4 * (-LINE_WIDTH,)
-INNER_OFFSET = morepygame.Offset(*OFFSETS)
 
 entities = ground, player, ball
 
@@ -70,7 +71,8 @@ paused = False
 display_collisions = False
 dt = 0
 while running:
-    screen.fill(GROUND_COLOR)
+    # screen.fill(GROUND_COLOR)
+    screen.blit(bg_surf, (0, 0))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -82,11 +84,15 @@ while running:
             elif event.key == pygame.K_d:
                 display_collisions = not display_collisions
 
+    old_player_pos = player.pos
     dxdy = morepygame.keyboard.get_moving_amount()
     if dxdy:
         player.pos += dxdy
 
-    player.stay_into(ground_rect, INNER_OFFSET)
+    # player.stay_into(ground_rect, INNER_OFFSET)
+    player_rect = player.get_rect()
+    if player_rect.clip(ground_rect) != player_rect:
+        player.pos = old_player_pos
 
     for entity in entities:
         entity.display_on_surface(screen)
@@ -99,11 +105,13 @@ while running:
     manage_bouncing(ball, ground)
     manage_bouncing(ball, player)
 
-    ball.stay_into(ground_rect, INNER_OFFSET)
-
     pygame.display.flip()
 
     dt = clock.tick(60)
 
     if not paused:
+        old_ball_pos = ball.pos
         ball.move(dt)
+        ball_rect = ball.get_rect()
+        if ball_rect.clip(ground_rect) != ball_rect:
+            ball.pos = old_ball_pos
