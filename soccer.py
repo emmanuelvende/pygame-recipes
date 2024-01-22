@@ -22,6 +22,7 @@ def manage_bouncing(entity, other):
         entity.speed_vec.reflect_ip(normal_vec)
 
 
+GREEN = 0, 255, 0
 BG_COLOR = 16, 8, 24
 W, H = 800, 600
 COLOR_KEY = 17, 17, 17
@@ -40,16 +41,23 @@ pygame.mouse.set_visible(False)
 clock = pygame.time.Clock()
 
 
-radius = 30
+radius = 16
 ball_surf = pygame.Surface((2 * radius, 2 * radius))
 ball_surf.fill(BG_COLOR)
 pygame.draw.circle(ball_surf, BALL_COLOR, ball_surf.get_rect().center, radius)
 ball = morepygame.Entity(speed=(0.5, 0.25))
+# ball_surf = pygame.image.load("soccer-ball.png")
+ball_surf = pygame.transform.scale_by(ball_surf, 2)
 ball.apply_surface(ball_surf, colorkey=BG_COLOR)
 ball.pos = screen.get_rect().center
 
 player = morepygame.Entity()
-player.apply_image("hero.png", colorkey=COLOR_KEY)
+player_surf = pygame.image.load("soccer-player.png")
+player_surf = pygame.transform.scale_by(player_surf, 4)
+
+
+# player.apply_image("hero.png", colorkey=COLOR_KEY)
+player.apply_surface(player_surf, colorkey=GREEN)
 player.pos = 200, 200
 
 LINE_WIDTH = 10
